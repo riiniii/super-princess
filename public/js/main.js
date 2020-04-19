@@ -12,21 +12,28 @@ function drawBackground(background, context, sprites) {
   });
 }
 
+function loadBackgroundSprites() {
+  return loadImage("/image/tiles.png").then((image) => {
+    const sprites = new SpriteSheet(image, 16, 16);
+    // define our sprites and add to SpriteSheet map
+    sprites.define("ground", 0, 0);
+    sprites.define("sky", 3, 23);
+    return sprites;
+  });
+}
+
 const canvas = document.getElementById("screen");
 const context = canvas.getContext("2d");
 
 context.fillRect(0, 0, 50, 50);
 
-loadImage("/image/tiles.png").then((image) => {
-  const sprites = new SpriteSheet(image, 16, 16);
-  // define our sprites and add to SpriteSheet map
-  sprites.define("ground", 0, 0);
-  sprites.define("sky", 3, 23);
-
-  loadLevel("1-1").then((level) => {
-    console.log(level);
-    level.backgrounds.forEach((background) => {
-      drawBackground(background, context, sprites);
+Promise.all([loadBackgroundSprites(), loadLevel("1-1")]).then(
+  ([sprites, level]) => {
+    loadLevel("1-1").then((level) => {
+      console.log(level);
+      level.backgrounds.forEach((background) => {
+        drawBackground(background, context, sprites);
+      });
     });
-  });
-});
+  }
+);
