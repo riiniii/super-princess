@@ -1,0 +1,23 @@
+{
+  "name": "super-princess",
+  "version": "1.0.0",
+  "description": "super mario but with a princess",
+  "main": "index.js",
+  "scripts": {
+    "start": "serve ./public",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhuang-a10/super-princess.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rhuang-a10/super-princess/issues"
+  },
+  "homepage": "https://github.com/rhuang-a10/super-princess#readme",
+  "dependencies": {
+    "serve": "^11.3.0"
+  }
+}
