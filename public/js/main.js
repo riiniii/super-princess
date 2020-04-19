@@ -1,39 +1,48 @@
-import SpriteSheet from "./SpriteSheet.js";
-import { loadImage, loadLevel } from "./loaders.js";
-
-function drawBackground(background, context, sprites) {
-  console.log(background);
-  background.ranges.forEach(([x1, x2, y1, y2]) => {
-    for (let x = x1; x < x2; x++) {
-      for (let y = y1; y < y2; y++) {
-        sprites.drawTile(background.tile, context, x, y);
-      }
-    }
-  });
-}
-
-function loadBackgroundSprites() {
-  return loadImage("/image/tiles.png").then((image) => {
-    const sprites = new SpriteSheet(image, 16, 16);
-    // define our sprites and add to SpriteSheet map
-    sprites.define("ground", 0, 0);
-    sprites.define("sky", 3, 23);
-    return sprites;
-  });
-}
-
+import Compositor from "./Compositor.js";
+import { loadLevel } from "./loaders.js";
+import { loadBackgroundSprites, loadPrincessPeachSprite } from "./sprites.js";
+import { createBackgroundLayer } from "./layers.js";
 const canvas = document.getElementById("screen");
 const context = canvas.getContext("2d");
 
 context.fillRect(0, 0, 50, 50);
 
-Promise.all([loadBackgroundSprites(), loadLevel("1-1")]).then(
-  ([sprites, level]) => {
-    loadLevel("1-1").then((level) => {
-      console.log(level);
-      level.backgrounds.forEach((background) => {
-        drawBackground(background, context, sprites);
-      });
-    });
+function createSpriteLayer(sprite, pos) {
+  return function drawSpriteLayer(context) {
+    for (let i = 0; i < 20; i++) {
+      sprite.draw("idle_peach", context, pos.x + i * 32, pos.y);
+    }
+  };
+}
+
+Promise.all([
+  loadPrincessPeachSprite(),
+  loadBackgroundSprites(),
+  loadLevel("1-1"),
+]).then(([princessPeachSprite, backgroundSprites, level]) => {
+  const comp = new Compositor();
+  const backgroundLayer = createBackgroundLayer(
+    level.backgrounds,
+    backgroundSprites
+  );
+  comp.layers.push(backgroundLayer);
+
+  const pos = {
+    x: 64,
+    y: 64,
+    update: function updateBy(numberOfPixels) {
+      this.x += numberOfPixels;
+      this.y += numberOfPixels;
+    },
+  };
+  const spriteLayer = createSpriteLayer(princessPeachSprite, pos);
+  comp.layers.push(spriteLayer);
+
+  function update() {
+    comp.draw(context);
+    // update positions
+    pos.update(2);
+    requestAnimationFrame(update); // built in browser function, helps make animations more accurate
   }
-);
+  update();
+});
