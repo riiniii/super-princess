@@ -12,6 +12,8 @@ export default class TileCollider {
       y = entity.pos.y + entity.size.y; // use upper y
     } else if (entity.vel.y < 0) {
       y = entity.pos.y; // use lower y
+    } else {
+      return;
     }
 
     const matches = this.tiles.searchByRange(
@@ -50,6 +52,8 @@ export default class TileCollider {
       x = entity.pos.x + entity.size.x; // x from the right side of mario
     } else if (entity.vel.x < 0) {
       x = entity.pos.x; // x from the left isde, which is just pos.x
+    } else {
+      return;
     }
 
     const matches = this.tiles.searchByRange(
@@ -58,8 +62,9 @@ export default class TileCollider {
       entity.pos.y,
       entity.pos.y + entity.size.y
     );
+
     matches.forEach((match) => {
-      if (match.tile.name !== "ground") {
+      if (match.tile.type !== "ground") {
         return;
       }
 
@@ -70,7 +75,7 @@ export default class TileCollider {
           entity.pos.x = match.x1 - entity.size.x;
           entity.vel.x = 0;
         }
-      } else if (entity.vel.x < 0) {
+      } else if (entity.vel.x <= 0) {
         // falling
         if (entity.pos.x < match.x2) {
           // under
@@ -79,13 +84,5 @@ export default class TileCollider {
         }
       }
     });
-  }
-
-  test(entity) {
-    this.checkY(entity);
-    // const match = this.tiles.matchByPosition(entity.pos.x, entity.pos.y);
-    // if (match) {
-    // console.log("Tile matched", match, match.tile);
-    // }
   }
 }
