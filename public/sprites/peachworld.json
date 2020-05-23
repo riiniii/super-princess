@@ -1,0 +1,43 @@
+{
+  "imageURL": "/images/backgrounds_peach.png",
+  "tileWidth": 16,
+  "tileHeight": 16,
+  "tiles": [
+    {
+      "name": "ground-bottom",
+      "index": [3.671875, 20.484375]
+    },
+    {
+      "name": "grass",
+      "index": [0.53125, 0.1]
+    },
+    {
+      "name": "sky",
+      "index": [1.5625, 0.24]
+    },
+    {
+      "name": "flower-1",
+      "index": [10.5, 0.15]
+    },
+    {
+      "name": "flower-2",
+      "index": [11.4375, 0.15]
+    },
+    {
+      "name": "ground-flower-1",
+      "index": [6.875, 20.4375]
+    },
+    {
+      "name": "ground-flower-2",
+      "index": [7.9375, 20.4375]
+    },
+    {
+      "name": "goodies",
+      "index": [11.625, 55.125],
+      "sourceWidth": 30,
+      "sourceHeight": 28,
+      "destWidth": 16,
+      "destHeight": 16
+    }
+  ]
+}

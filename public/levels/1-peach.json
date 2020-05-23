@@ -1,0 +1,60 @@
+{
+  "spritesheet": "peachworld",
+  "backgrounds": [
+    {
+      "tile": "sky",
+      "ranges": [[0, 212, 0, 14]]
+    },
+    {
+      "tile": "grass",
+      "ranges": [[0, 212, 12, 1]]
+    },
+    {
+      "tile": "ground-bottom",
+      "type": "ground",
+      "ranges": [[0, 212, 13, 1]]
+    },
+    {
+      "tile": "flower-1",
+      "ranges": [
+        [3, 12],
+        [7, 12]
+      ]
+    },
+    {
+      "tile": "flower-2",
+      "ranges": [
+        [3, 12],
+        [8, 12],
+        [6, 12]
+      ]
+    },
+    {
+      "tile": "ground-flower-1",
+      "type": "ground",
+      "ranges": [
+        [4, 13],
+        [8, 13],
+        [6, 13]
+      ]
+    },
+    {
+      "tile": "ground-flower-2",
+      "type": "ground",
+      "ranges": [
+        [3, 13],
+        [1, 13],
+        [9, 13]
+      ]
+    },
+    {
+      "tile": "goodies",
+      "type": "ground",
+      "ranges": [
+        [9, 3, 8],
+        [8, 9],
+        [7, 10]
+      ]
+    }
+  ]
+}

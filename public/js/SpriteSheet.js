@@ -6,32 +6,68 @@ export default class SpriteSheet {
     this.tiles = new Map();
   }
 
-  define(name, x, y, width, height, dX = 0, dY = 0, dWidth, dHeight) {
-    const buffer = document.createElement("canvas");
-    buffer.width = width;
-    buffer.height = height;
-    buffer.getContext("2d").drawImage(
-      this.image,
-      // location
-      x,
-      y,
-      // size
-      width,
-      height,
-      dX,
-      dY,
-      dWidth || width,
-      dHeight || height
-    );
+  define(
+    name,
+    x,
+    y,
+    width,
+    height,
+    dWidth,
+    dHeight,
+    sourceWidth,
+    sourceHeight
+  ) {
+    const buffers = [true, false].map((flip) => {
+      // return non mirrored and mirrored buffer!
+      const buffer = document.createElement("canvas");
+      buffer.width = width;
+      buffer.height = height;
+
+      const context = buffer.getContext("2d");
+
+      // flip! // mirror
+      if (flip) {
+        context.scale(-1, 1);
+        context.translate(-width, 0);
+      }
+
+      context.drawImage(
+        this.image,
+        // location
+        x,
+        y,
+        // size
+        sourceWidth || width,
+        sourceHeight || height,
+        0,
+        0,
+        dWidth || width,
+        dHeight || height
+      );
+
+      return buffer;
+    });
     // map tiles to be able to access easily when calling draw()
-    this.tiles.set(name, buffer);
+    this.tiles.set(name, buffers);
   }
 
-  defineTile(name, x, y) {
-    this.define(name, x * this.width, y * this.height, this.width, this.height);
+  defineTile(name, x, y, tile) {
+    const { destWidth, destHeight, sourceWidth, sourceHeight } = tile;
+    this.define(
+      name,
+      x * this.width,
+      y * this.height,
+      this.width,
+      this.height,
+      destWidth,
+      destHeight,
+      sourceWidth,
+      sourceHeight
+    );
   }
-  draw(name, context, x, y) {
-    const buffer = this.tiles.get(name);
+  draw(name, context, x, y, flip = false) {
+    const isFlipped = flip ? 0 : 1;
+    const buffer = this.tiles.get(name)[isFlipped];
     context.drawImage(buffer, x, y);
   }
 
