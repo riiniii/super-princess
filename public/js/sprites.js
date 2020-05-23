@@ -20,13 +20,3 @@ export function loadPrincessPeachSprite() {
     return sprites;
   });
 }
-
-export function loadBackgroundSprites() {
-  return loadImage("/images/tiles.png").then((image) => {
-    const sprites = new SpriteSheet(image, 16, 16);
-    // define our sprites and add to SpriteSheet map
-    sprites.defineTile("ground", 0, 0);
-    sprites.defineTile("sky", 3, 23);
-    return sprites;
-  });
-}

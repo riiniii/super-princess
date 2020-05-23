@@ -12,10 +12,9 @@ export function createPrincessPeach() {
 
     princessPeach.addTrait(new Go());
     princessPeach.addTrait(new Jump());
-    // princessPeach.addTrait(new Velocity());
 
     princessPeach.draw = function drawPrincessPeach(context) {
-      sprite.draw("idle_peach", context, this.pos.x, this.pos.y);
+      sprite.draw("idle_peach", context, 0, 0);
     };
     return princessPeach;
   });
