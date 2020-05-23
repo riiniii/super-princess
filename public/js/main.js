@@ -1,54 +1,40 @@
-import Compositor from "./Compositor.js";
 import Timer from "./Timer.js";
 import { loadLevel } from "./loaders.js";
 import { createPrincessPeach } from "./entities.js";
-import { loadBackgroundSprites } from "./sprites.js";
-import { createBackgroundLayer, createSpriteLayer } from "./layers.js";
-import Keyboard from "./KeyboardState.js";
+import { createCollisionLayer } from "./layers.js";
+import { setupKeyboard } from "./Input.js";
 
 const canvas = document.getElementById("screen");
 const context = canvas.getContext("2d");
 
-context.fillRect(0, 0, 50, 50);
+Promise.all([createPrincessPeach(), loadLevel("1-1")]).then(
+  ([princessPeach, level]) => {
+    // vectors
+    princessPeach.pos.set(0, 0);
 
-Promise.all([
-  createPrincessPeach(),
-  loadBackgroundSprites(),
-  loadLevel("1-1"),
-]).then(([princessPeach, backgroundSprites, level]) => {
-  const comp = new Compositor();
-  const backgroundLayer = createBackgroundLayer(
-    level.backgrounds,
-    backgroundSprites
-  );
-  comp.layers.push(backgroundLayer);
-  const gravity = 500;
-  // vectors
-  princessPeach.pos.set(64, 180);
+    level.comp.layers.push(createCollisionLayer(level));
 
-  const SPACE = 32;
-  const input = new Keyboard();
+    level.entities.add(princessPeach);
 
-  input.addMapping(SPACE, (keyState) => {
-    if (keyState) {
-      princessPeach.jump.start();
-    } else {
-      princessPeach.jump.cancel();
-    }
-    console.log(keyState);
-  });
+    const input = setupKeyboard(princessPeach);
 
-  input.listenTo(window);
+    input.listenTo(window);
 
-  const spriteLayer = createSpriteLayer(princessPeach);
-  comp.layers.push(spriteLayer);
+    ["mousemove", "mousedown"].forEach((eventName) => {
+      canvas.addEventListener(eventName, (event) => {
+        console.log(eventName, event.button);
+        if (event.button === 0) {
+          princessPeach.vel.set(0, 0);
+          princessPeach.pos.set(event.offsetX, event.offsetY);
+        }
+      });
+    });
 
-  const timer = new Timer(1 / 60);
-  timer.update = function update(deltaTime) {
-    princessPeach.updateTraits(deltaTime);
-    comp.draw(context);
-
-    princessPeach.vel.y += gravity * deltaTime;
-  };
-  timer.start(); // init requestAnimationFrame
-});
+    const timer = new Timer(1 / 60);
+    timer.update = function update(deltaTime) {
+      level.update(deltaTime);
+      level.comp.draw(context);
+    };
+    timer.start(); // init requestAnimationFrame
+  }
+);

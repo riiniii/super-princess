@@ -6,7 +6,7 @@ export default class SpriteSheet {
     this.tiles = new Map();
   }
 
-  define(name, x, y, width, height) {
+  define(name, x, y, width, height, dX, dY, dWidth, dHeight) {
     const buffer = document.createElement("canvas");
     buffer.width = width;
     buffer.height = height;
@@ -18,14 +18,15 @@ export default class SpriteSheet {
       // size
       width,
       height,
-      0,
-      0,
-      width,
-      height
+      dX || 0,
+      dY || 0,
+      dWidth || width,
+      dHeight || height
     );
     // map tiles to be able to access easily when calling draw()
     this.tiles.set(name, buffer);
   }
+
   defineTile(name, x, y) {
     this.define(name, x * this.width, y * this.height, this.width, this.height);
   }
