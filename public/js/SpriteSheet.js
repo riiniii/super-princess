@@ -69,9 +69,12 @@ export default class SpriteSheet {
     );
   }
   draw(name, context, x, y, flip = false) {
-    const isFlipped = flip ? 0 : 1;
-    const buffer = this.tiles.get(name)[isFlipped];
-    context.drawImage(buffer, x, y);
+    if (this.tiles.get(name)) {
+      const buffer = this.tiles.get(name)[flip ? 0 : 1];
+      context.drawImage(buffer, x, y);
+    } else {
+      console.log(name, this.tiles);
+    }
   }
 
   drawTile(name, context, x, y) {

@@ -9,7 +9,7 @@ import Camera from "./Camera.js";
 const canvas = document.getElementById("screen");
 const context = canvas.getContext("2d");
 
-Promise.all([createPrincessPeach(), loadLevel("1-peach")]).then(
+Promise.all([createPrincessPeach(), loadLevel("1-1")]).then(
   ([princessPeach, level]) => {
     const camera = new Camera();
     window.camera = camera;
