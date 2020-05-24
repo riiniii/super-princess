@@ -38,6 +38,29 @@
       "sourceHeight": 28,
       "destWidth": 16,
       "destHeight": 16
+    },
+    {
+      "name": "goodies-1",
+      "index": [13.3125, 52.9375],
+      "sourceWidth": 30,
+      "sourceHeight": 34,
+      "destWidth": 16,
+      "destHeight": 18.133
+    },
+    {
+      "name": "goodies-2",
+      "index": [13.6875, 55],
+      "sourceWidth": 30,
+      "sourceHeight": 25.5,
+      "destWidth": 15.1,
+      "destHeight": 15.3
+    }
+  ],
+  "animations": [
+    {
+      "name": "goodies",
+      "frameLen": 0.4,
+      "frames": ["goodies-1", "goodies-2"]
     }
   ]
 }

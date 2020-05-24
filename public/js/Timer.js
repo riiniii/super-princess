@@ -5,6 +5,10 @@ export default class Timer {
 
     this.updateProxy = (time) => {
       accumulatedTime += (time - lastTime) / 1000;
+
+      if (accumulatedTime > 1) {
+        accumulatedTime = 1; // flatten
+      }
       while (accumulatedTime > deltaTime) {
         this.update(deltaTime); // update() func assigned prototypically in main.js
         accumulatedTime -= deltaTime;

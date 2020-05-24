@@ -55,6 +55,16 @@
         [8, 9],
         [7, 10]
       ]
+    },
+    {
+      "tile": "goodies-1",
+      "type": "ground",
+      "ranges": [[1, 1]]
+    },
+    {
+      "tile": "goodies-2",
+      "type": "ground",
+      "ranges": [[2, 2]]
     }
   ]
 }
