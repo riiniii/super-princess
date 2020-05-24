@@ -9,17 +9,18 @@ import Camera from "./Camera.js";
 const canvas = document.getElementById("screen");
 const context = canvas.getContext("2d");
 
-Promise.all([createPrincessPeach(), loadLevel("1-1")]).then(
+Promise.all([createPrincessPeach(), loadLevel("1-peach")]).then(
   ([princessPeach, level]) => {
     const camera = new Camera();
     window.camera = camera;
     // vectors
     princessPeach.pos.set(64, 64);
 
-    level.comp.layers.push(
-      createCollisionLayer(level),
-      createCameraLayer(camera)
-    );
+    // debugger tools
+    // level.comp.layers.push(
+    //   createCollisionLayer(level),
+    //   createCameraLayer(camera)
+    // );
 
     level.entities.add(princessPeach);
 

@@ -1,7 +1,7 @@
 import Level from "./Level.js";
 import SpriteSheet from "./SpriteSheet.js";
 import { createBackgroundLayer, createSpriteLayer } from "./layers.js";
-
+import { createAnimation } from "./animation.js";
 export function loadImage(url) {
   return new Promise((resolve) => {
     const image = new Image();
@@ -15,7 +15,7 @@ export function loadImage(url) {
 function loadJSON(url) {
   return fetch(url).then((r) => r.json());
 }
-function loadSpriteSheet(name) {
+export function loadSpriteSheet(name) {
   return loadJSON(`sprites/${name}.json`)
     .then((sheetSpec) =>
       Promise.all([sheetSpec, loadImage(sheetSpec.imageURL)])
@@ -24,13 +24,33 @@ function loadSpriteSheet(name) {
       const { tileWidth, tileHeight } = sheetSpec;
       const sprites = new SpriteSheet(image, tileWidth, tileHeight);
 
-      sheetSpec.tiles.forEach((tileSpec) => {
-        // define our sprites and add to SpriteSheet map
-        const { name, index } = tileSpec;
-        const [x, y] = index;
+      if (sheetSpec.tiles) {
+        sheetSpec.tiles.forEach((tileSpec) => {
+          // define our sprites and add to SpriteSheet map
+          const { name, index } = tileSpec;
+          const [x, y] = index;
 
-        sprites.defineTile(name, x, y);
-      });
+          sprites.defineTile(name, x, y, tileSpec);
+        });
+      }
+
+      if (sheetSpec.frames) {
+        sheetSpec.frames.forEach((frameSpec) => {
+          const { name, rect } = frameSpec;
+          sprites.define(name, ...rect);
+        });
+      }
+
+      if (sheetSpec.animations) {
+        sheetSpec.animations.forEach((animSpec) => {
+          const animations = createAnimation(
+            animSpec.frames,
+            animSpec.frameLen
+          );
+          sprites.defineAnimation(animSpec.name, animations);
+        });
+      }
+
       return sprites;
     });
 }
