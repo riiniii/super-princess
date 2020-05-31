@@ -1,48 +1,50 @@
 import Entity from "./Entity.js";
-import Jump from "./traits/Jump.js";
 import Go from "./traits/Go.js";
-
-import { createAnimation } from "./animation.js";
+import Jump from "./traits/Jump.js";
 import { loadSpriteSheet } from "./loaders.js";
+import { createAnim } from "./anim.js";
 
-export function createPrincessPeach() {
-  return loadSpriteSheet("peach").then((sprite) => {
-    const princessPeach = new Entity();
-    princessPeach.size.set(24, 32);
+const SLOW_DRAG = 1 / 1000;
+const FAST_DRAG = 1 / 5000;
 
-    princessPeach.addTrait(new Go());
-    princessPeach.addTrait(new Jump());
-    const runAnimation = createAnimation(
-      [
-        "run-1",
-        "run-2",
-        "run-3",
-        "run-4",
-        "run-5",
-        "run-6",
-        "run-7",
-        "run-8",
-        "run-9",
-        "run-10",
-        "run-11",
-      ],
-      10
-    );
-    function routeFrame(peach) {
-      if (peach.go.dir !== 0) {
-        return runAnimation(peach.go.distance);
-      }
-      return "idle_peach";
-    }
-    princessPeach.draw = function drawPrincessPeach(context) {
-      sprite.draw(
-        routeFrame(princessPeach),
-        context,
-        0,
-        0,
-        princessPeach.go.heading < 0
-      );
+export function createMario() {
+  return loadSpriteSheet("mario").then((sprite) => {
+    const mario = new Entity();
+    mario.size.set(14, 16);
+
+    mario.addTrait(new Go());
+    mario.go.dragFactor = SLOW_DRAG;
+
+    mario.addTrait(new Jump());
+
+    mario.turbo = function setTurboState(turboOn) {
+      this.go.dragFactor = turboOn ? FAST_DRAG : SLOW_DRAG;
     };
-    return princessPeach;
+
+    const runAnim = createAnim(["run-1", "run-2", "run-3"], 6);
+    function routeFrame(mario) {
+      if (mario.jump.falling) {
+        return "jump";
+      }
+
+      if (mario.go.distance > 0) {
+        if (
+          (mario.vel.x > 0 && mario.go.dir < 0) ||
+          (mario.vel.x < 0 && mario.go.dir > 0)
+        ) {
+          return "break";
+        }
+
+        return runAnim(mario.go.distance);
+      }
+
+      return "idle";
+    }
+
+    mario.draw = function drawMario(context) {
+      sprite.draw(routeFrame(this), context, 0, 0, this.go.heading < 0);
+    };
+
+    return mario;
   });
 }

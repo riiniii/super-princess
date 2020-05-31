@@ -1,7 +1,8 @@
 {
   "imageURL": "/images/tiles.png",
-  "tileWidth": 16,
-  "tileHeight": 16,
+  "tileW": 16,
+  "tileH": 16,
+
   "tiles": [
     {
       "name": "ground",
@@ -22,6 +23,27 @@
     {
       "name": "chance",
       "index": [24, 0]
+    },
+
+    {
+      "name": "chance-1",
+      "index": [24, 0]
+    },
+    {
+      "name": "chance-2",
+      "index": [25, 0]
+    },
+    {
+      "name": "chance-3",
+      "index": [26, 0]
+    }
+  ],
+
+  "animations": [
+    {
+      "name": "chance",
+      "frameLen": 0.12,
+      "frames": ["chance-1", "chance-1", "chance-2", "chance-3", "chance-2"]
     }
   ]
 }

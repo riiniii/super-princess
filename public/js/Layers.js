@@ -1,27 +1,24 @@
 export function createBackgroundLayer(level, sprites) {
   const tiles = level.tiles;
   const resolver = level.tileCollider.tiles;
+
   const buffer = document.createElement("canvas");
   buffer.width = 256 + 16;
   buffer.height = 240;
 
   const context = buffer.getContext("2d");
+
   let startIndex, endIndex;
   function redraw(drawFrom, drawTo) {
-    // only redraw when you need to
-    // if (drawFrom === startIndex && drawTo === endIndex) {
-    //   return;
-    // }
-
     startIndex = drawFrom;
     endIndex = drawTo;
 
-    for (let x = startIndex; x <= endIndex; x++) {
+    for (let x = startIndex; x <= endIndex; ++x) {
       const col = tiles.grid[x];
       if (col) {
         col.forEach((tile, y) => {
           if (sprites.animations.has(tile.name)) {
-            sprites.drawAnimation(
+            sprites.drawAnim(
               tile.name,
               context,
               x - startIndex,
@@ -40,26 +37,24 @@ export function createBackgroundLayer(level, sprites) {
     const drawWidth = resolver.toIndex(camera.size.x);
     const drawFrom = resolver.toIndex(camera.pos.x);
     const drawTo = drawFrom + drawWidth;
-    redraw(drawFrom, drawTo); // redraw when moving left or right, row by row! thanks to modulo op
+    redraw(drawFrom, drawTo);
+
     context.drawImage(buffer, -camera.pos.x % 16, -camera.pos.y);
   };
 }
 
 export function createSpriteLayer(entities, width = 64, height = 64) {
-  // temp buffer to draw on
   const spriteBuffer = document.createElement("canvas");
   spriteBuffer.width = width;
   spriteBuffer.height = height;
-
   const spriteBufferContext = spriteBuffer.getContext("2d");
 
   return function drawSpriteLayer(context, camera) {
     entities.forEach((entity) => {
-      // clear previous rect
       spriteBufferContext.clearRect(0, 0, width, height);
-      // draw onto temp buffer
+
       entity.draw(spriteBufferContext);
-      // draw the sprite buffer onto our context
+
       context.drawImage(
         spriteBuffer,
         entity.pos.x - camera.pos.x,
@@ -69,17 +64,16 @@ export function createSpriteLayer(entities, width = 64, height = 64) {
   };
 }
 
-// talk to tile resolver
 export function createCollisionLayer(level) {
   const resolvedTiles = [];
+
   const tileResolver = level.tileCollider.tiles;
   const tileSize = tileResolver.tileSize;
 
-  const getIndexByOriginal = tileResolver.getByIndex;
-  // override
-  tileResolver.getByIndex = function getByFake(x, y) {
+  const getByIndexOriginal = tileResolver.getByIndex;
+  tileResolver.getByIndex = function getByIndexFake(x, y) {
     resolvedTiles.push({ x, y });
-    return getIndexByOriginal.call(tileResolver, x, y);
+    return getByIndexOriginal.call(tileResolver, x, y);
   };
 
   return function drawCollision(context, camera) {
@@ -112,7 +106,6 @@ export function createCollisionLayer(level) {
 }
 
 export function createCameraLayer(cameraToDraw) {
-  //
   return function drawCameraRect(context, fromCamera) {
     context.strokeStyle = "purple";
     context.beginPath();

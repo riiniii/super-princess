@@ -7,21 +7,24 @@ export default class Timer {
       accumulatedTime += (time - lastTime) / 1000;
 
       if (accumulatedTime > 1) {
-        accumulatedTime = 1; // flatten
+        accumulatedTime = 1;
       }
+
       while (accumulatedTime > deltaTime) {
-        this.update(deltaTime); // update() func assigned prototypically in main.js
+        this.update(deltaTime);
         accumulatedTime -= deltaTime;
       }
 
       lastTime = time;
 
-      this.enqueue(); // continue our requestAnimationFrames
+      this.enqueue();
     };
   }
+
   enqueue() {
-    requestAnimationFrame(this.updateProxy); // built in browser function, helps make animations more accurate
+    requestAnimationFrame(this.updateProxy);
   }
+
   start() {
     this.enqueue();
   }
