@@ -1,10 +1,12 @@
 const PRESSED = 1;
-const RELEASE = 0;
+const RELEASED = 0;
+
 export default class KeyboardState {
   constructor() {
-    // holds the current state of a given key
+    // Holds the current state of a given key
     this.keyStates = new Map();
-    // holds the callback fcn for a code
+
+    // Holds the callback functions for a key code
     this.keyMap = new Map();
   }
 
@@ -16,19 +18,20 @@ export default class KeyboardState {
     const { code } = event;
 
     if (!this.keyMap.has(code)) {
-      // did not have key mapped.
-      return false;
+      // Did not have key mapped.
+      return;
     }
 
     event.preventDefault();
 
-    const keyState = event.type === "keydown" ? PRESSED : RELEASE;
+    const keyState = event.type === "keydown" ? PRESSED : RELEASED;
 
     if (this.keyStates.get(code) === keyState) {
       return;
     }
 
     this.keyStates.set(code, keyState);
+
     this.keyMap.get(code)(keyState);
   }
 
