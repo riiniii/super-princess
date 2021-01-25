@@ -1,3 +1,7 @@
+# under construction, moving game to flappy bird style
+
+
+
 # super-princess
 try to make super mario but with super princess
 
